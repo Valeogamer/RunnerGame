@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Subway Rush — бесконечный раннер</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game" aria-label="Игровое поле"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div class="hud-left">
+      <div id="score" class="score">0</div>
+      <div id="dist" class="dist">0 м</div>
+    </div>
+    <div class="hud-right">
+      <div class="chip"><span class="icon">🪙</span><span id="coins">0</span></div>
+      <div class="chip dim"><span class="icon">🏆</span><span id="best">0</span></div>
+    </div>
+    <div id="powerups" class="powerups"></div>
+    <div class="hud-buttons">
+      <button id="btn-mute" class="icon-btn" title="Звук (M)">🔊</button>
+      <button id="btn-pause" class="icon-btn" title="Пауза (P)">⏸</button>
+    </div>
+  </div>
+
+  <!-- Меню -->
+  <div id="menu" class="overlay">
+    <div class="panel">
+      <h1>SUBWAY <span>RUSH</span></h1>
+      <p class="subtitle">Бесконечный раннер: три полосы, поезда, монеты и бонусы</p>
+      <button id="btn-play" class="btn primary">Играть</button>
+      <div class="controls">
+        <div class="ctrl"><span class="keys"><b>←</b><b>→</b> / <b>A</b><b>D</b></span><span>смена полосы</span></div>
+        <div class="ctrl"><span class="keys"><b>↑</b> / <b>Space</b></span><span>прыжок</span></div>
+        <div class="ctrl"><span class="keys"><b>↓</b> / <b>S</b></span><span>подкат</span></div>
+        <div class="ctrl"><span class="keys"><b>P</b></span><span>пауза</span></div>
+      </div>
+      <p class="hint">На телефоне — свайпы вверх/вниз/влево/вправо. Поезда не перепрыгнуть — меняйте полосу!</p>
+      <p class="record">Рекорд: <span id="menu-best">0</span></p>
+    </div>
+  </div>
+
+  <!-- Пауза -->
+  <div id="pause" class="overlay hidden">
+    <div class="panel">
+      <h2>Пауза</h2>
+      <button id="btn-resume" class="btn primary">Продолжить</button>
+      <button id="btn-restart-pause" class="btn">Заново</button>
+      <button id="btn-menu" class="btn">В меню</button>
+    </div>
+  </div>
+
+  <!-- Игра окончена -->
+  <div id="over" class="overlay hidden">
+    <div class="panel">
+      <h2 id="over-title">Игра окончена</h2>
+      <div id="badge-record" class="badge hidden">🏆 Новый рекорд!</div>
+      <div class="stats">
+        <div class="stat"><span>Очки</span><b id="over-score">0</b></div>
+        <div class="stat"><span>Монеты</span><b id="over-coins">0</b></div>
+        <div class="stat"><span>Дистанция</span><b id="over-dist">0 м</b></div>
+        <div class="stat"><span>Рекорд</span><b id="over-best">0</b></div>
+      </div>
+      <button id="btn-restart" class="btn primary">Ещё раз <small>(Enter)</small></button>
+      <button id="btn-menu2" class="btn">В меню</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/entities.js"></script>
+<script src="js/game.js"></script>
+<script src="js/render.js"></script>
+<script src="js/render-entities.js"></script>
+<script src="js/input.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

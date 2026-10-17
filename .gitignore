@@ -1,0 +1,14 @@
+# OS / редакторы
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Артефакты тестов/скриншотов локально
+/tmp/
+*.log

@@ -1,0 +1,10 @@
+{
+  "name": "runner-game",
+  "version": "1.0.0",
+  "description": "Subway Rush — 2D endless runner в духе Subway Surfers на чистом Canvas 2D",
+  "private": true,
+  "scripts": {
+    "test": "node test/smoke.js",
+    "start": "python3 -m http.server 8000"
+  }
+}
