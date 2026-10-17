@@ -21,6 +21,9 @@ for (const f of ['config', 'utils', 'entities', 'game']) {
 const C = window.RG.CONFIG;
 const U = window.RG.util;
 
+// Детерминированный ГПСЧ: тесты не флакуют и воспроизводятся один в один.
+Math.random = U.seededRandom(20261017);
+
 let failures = 0;
 function check(name, cond, extra) {
   if (cond) console.log('  ok  ' + name);
@@ -193,8 +196,10 @@ function cleanTrack(game) {
   console.log('\n[5] Прогон 180 секунд с ботом');
   const game = new window.RG.Game(null);
   let crashes = 0;
-  game.hooks.onGameOver = () => { crashes++; };
+  let totalCoins = 0;
+  game.hooks.onGameOver = s => { crashes++; totalCoins += s.coins; };
   game.start();
+  const coinListLen = () => game.coinList.length;
 
   const dt = 1 / 60;
   for (let frame = 0; frame < 180 * 60 && crashes < 3; frame++) {
@@ -203,6 +208,7 @@ function cleanTrack(game) {
 
     const p = game.player;
     const laneScore = [2, 2, 2];
+    const laneCoins = [0, 0, 0];
     const nearest = [null, null, null];
     for (const o of game.obstacles) {
       const dz = o.z - C.PLAYER_Z;
@@ -213,8 +219,17 @@ function cleanTrack(game) {
       if (sc < laneScore[o.lane]) laneScore[o.lane] = sc;
       if (!nearest[o.lane] || o.z < nearest[o.lane].z) nearest[o.lane] = o;
     }
+    // Небольшой бонус за монеты, если полоса и так безопасна.
+    for (const c of game.coinList) {
+      const dz = c.z - C.PLAYER_Z;
+      if (dz < 0 || dz > 22) continue;
+      const lane = C.LANES.indexOf(c.x);
+      if (lane >= 0) laneCoins[lane]++;
+    }
+    const score = i => laneScore[i] + Math.min(0.15, laneCoins[i] * 0.02);
+
     let best = p.lane;
-    for (let l = 0; l < 3; l++) if (laneScore[l] > laneScore[best] + 0.01) best = l;
+    for (let l = 0; l < 3; l++) if (score(l) > score(best) + 0.01) best = l;
     const dir = Math.sign(best - p.lane);
     if (dir) p.moveLane(dir); // по одной полосе за кадр, как живой игрок
 
@@ -228,10 +243,11 @@ function cleanTrack(game) {
     game.update(dt);
   }
   check('бот доезжает без падений дольше минуты', game.distance > 900, 'дистанция: ' + Math.round(game.distance));
-  check('набраны монеты за прогон', game.coins > 20, 'монет: ' + game.coins);
+  totalCoins += game.coins;
+  check('набраны монеты за прогон', totalCoins > 40, 'монет: ' + totalCoins);
   check('скорость растёт до максимума', game.speed > C.SPEED_MAX * 0.98, 'скорость: ' + game.speed.toFixed(1));
   check('очки начисляются', game.score > 3000, 'очки: ' + Math.round(game.score));
-  console.log('  (дистанция: ' + Math.round(game.distance) + ' м, монет: ' + game.coins +
+  console.log('  (дистанция: ' + Math.round(game.distance) + ' м, монет: ' + totalCoins +
     ', очков: ' + Math.round(game.score) + ', падений бота: ' + crashes + ')');
 })();
 

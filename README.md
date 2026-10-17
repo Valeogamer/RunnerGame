@@ -109,9 +109,11 @@ node test/smoke.js   # или: npm test
 - Ветка по умолчанию — `main`.
 - **CI** (`.github/workflows/tests.yml`): `node --check` для всех скриптов +
   `node test/smoke.js` на push и pull request.
-- **Pages** (`.github/workflows/pages.yml`): публикует статику игры на
-  https://valeogamer.github.io/RunnerGame/ при push в `main`
-  (нужен источник Pages = «GitHub Actions» в Settings → Pages).
+- **Pages** (`.github/workflows/pages.yml`): при push в `main` собирает статику
+  (`index.html`, `css/`, `js/`) и публикует её в ветку `gh-pages`.
+  Один раз нужно включить в **Settings → Pages → Source: Deploy from a branch →
+  `gh-pages` / (root)**, после этого игра живёт на
+  https://valeogamer.github.io/RunnerGame/.
 - В настройках репозитория стоит указать: **Description** —
   «Бесконечный 2D-раннер в духе Subway Surfers на чистом Canvas 2D»,
   **Topics** — `game`, `canvas`, `javascript`, `html5-game`, `endless-runner`,

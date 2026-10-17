@@ -168,7 +168,9 @@ window.RG = window.RG || {};
   };
 
   Game.prototype.spawnRowAt = function (zs, d) {
-    const busy = [0, 1, 2].filter(i => this.busyUntil[i] > zs - 2.5);
+    // Запас 4.5: дуги монет у нового ряда заходят на 3 юнита назад, плюс хвост
+    // поезда предыдущего ряда не должен попадать в зону новых монет.
+    const busy = [0, 1, 2].filter(i => this.busyUntil[i] > zs - 4.5);
     const free = [0, 1, 2].filter(i => busy.indexOf(i) === -1);
     if (free.length === 0) {
       this.spawnCoinLine(U.pick([0, 1, 2]), zs + 1, 'line');
